@@ -16,23 +16,42 @@ htmlTemplate = '''
         }
 
         
-    </style>
-</head>
-<body>
-    <div id="imagem">
+    '''
 
+imagem = cv2.imread('user.png')
+imagem = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+imagem_saida = []
+
+cont = 0
+for i in range(len(imagem)):
+    for j in range(len(imagem[i])):
+        cont += 1
+        style = '''#'''+str(cont)+''' {
+            width: 1px;
+            heigth: 1px;
+            background-color: rgb(0,0,'''+str(imagem[i][j])+''');
+        }'''
+        div = '<div id="'+str(cont)+'"></div>\n'
+        imagem_saida.append((style, div))
+        
+for item in imagem_saida:
+    htmlTemplate += item[0]
+
+htmlTemplate += '''
+        </style>
+    </head>
+    <body>
+        <div id="imagem">
+        '''
+
+for item in imagem_saida:
+    htmlTemplate += item[1]
+
+htmlTemplate += '''
     </div>
 </body>
 </html>
 '''
-
-imagem = cv2.imread('user.png')
-
-print(imagem)
-
-
-
-
 with open('page.html', 'w', encoding='utf-8') as file:
-    file.write()
+    file.write(htmlTemplate)
     file.close()
